@@ -1,0 +1,61 @@
+services:
+    cuda_test:
+        container_name: "cuda_test"
+        build: "./test"
+        volumes:
+            - test_v:/app
+        command: "python3 cuda_torch_test.py"
+
+        ipc: host
+        shm_size: 1024M
+        deploy:
+            resources:
+                reservations:
+                    devices:
+                        - driver: nvidia
+                          capabilities: [ gpu ]
+                          count: 1
+    deepflash_training:
+        container_name: "deepflash_training"
+        build: "./deepflash"
+        volumes:
+            - deepflash_v:/app
+        command: "./train.sh"
+        ipc: host
+        shm_size: 1024M
+        deploy:
+            resources:
+                reservations:
+                    devices:
+                        - driver: nvidia
+                          capabilities: [ gpu ]
+                          count: 1
+    # deepflash_inference:
+    #     container_name: "deepflash_inference"
+    #     build: "./deepflash"
+    #     volumes:
+    #         - deepflash_v:/app
+    #     command: "./test.sh"
+    #     ipc: host
+    #     shm_size: 1024M
+    #     deploy:
+    #         resources:
+    #             reservations:
+    #                 devices:
+    #                     - driver: nvidia
+    #                       capabilities: [ gpu ]
+    #                       count: 1
+
+volumes:
+    test_v:
+        driver: local
+        driver_opts:
+            o: bind
+            type: none
+            device: ./test
+    deepflash_v:
+        driver: local
+        driver_opts:
+            o: bind
+            type: none
+            device: ./deepflash
