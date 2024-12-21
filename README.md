@@ -2,4 +2,5 @@
 
 ## Projekt pri predmetu AMS
 
-navodila: TODO
+navodila: `ergerg`  
+asdasdas
